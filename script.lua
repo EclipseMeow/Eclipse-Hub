@@ -3703,6 +3703,54 @@ spawn(function()
     end
   end
 end)
+local ValentineGacha = Tabs.Valentine:AddToggle("ValentineGacha", {Title = "Auto Random Valentine Gacha Dealer", Description = "", Default = false})
+ValentineGacha:OnChanged(function(Value)
+    _G.AutoValentineGacha = Value
+end)
+
+function getSea()
+    local success, result = pcall(function()
+        if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Main") then
+            local seaText = game.Players.LocalPlayer.PlayerGui.Main.Sea.Text
+            if seaText:find("First") or seaText:find("1") then return 1 end
+            if seaText:find("Second") or seaText:find("2") then return 2 end
+            if seaText:find("Third") or seaText:find("3") then return 3 end
+        end
+        local pos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        if pos.Y > 0 and pos.Y < 200 then return 1 end
+        if pos.Y < -500 then return 2 end
+        if pos.Y > 3000 then return 3 end
+        return 1
+    end)
+    if success then return result else return 1 end
+end
+
+spawn(function()
+    while wait(.2) do
+        if _G.AutoValentineGacha then
+            pcall(function()
+                local dealer = findNPC("ValentinesGachaDealer")
+                if dealer then
+                    if getHearts() >= 250 then
+                        moveToNPC(dealer)
+                        wait(1)
+                        interact(dealer, "Roll")
+                        wait(0.5)
+                    end
+                else
+                    local sea = getSea()
+                    if sea == 1 then
+                        _tp(CFrame.new(2764, 432, -7144))
+                    elseif sea == 2 then
+                        _tp(CFrame.new(-1200, 25, -1700))
+                    elseif sea == 3 then
+                        _tp(CFrame.new(2000, 50, 1000))
+                    end
+                end
+            end)
+        end
+    end
+end)
 
 Tabs.Mirage:AddSection("Mystic Island / Full Moon")
 FullMOOn = Tabs.Mirage:AddParagraph({Title = " FullMoon Status ",Content = ""})
