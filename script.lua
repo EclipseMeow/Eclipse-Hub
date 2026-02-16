@@ -1,4 +1,10 @@
 task.spawn(function()
+    repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer
+    task.wait(1)
+    local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_")
+    remote:InvokeServer("SetTeam", "Pirates")
+end)
+task.spawn(function()
     local HttpService = game:GetService("HttpService")
     local Players = game:GetService("Players")
     local LP = Players.LocalPlayer
