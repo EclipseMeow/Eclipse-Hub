@@ -1,8 +1,13 @@
 task.spawn(function()
     repeat task.wait() until game:IsLoaded() and game.Players.LocalPlayer
     task.wait(1)
-    local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_")
-    remote:InvokeServer("SetTeam", "Pirates")
+    local success, err = pcall(function()
+        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_")
+        remote:InvokeServer("SetTeam", "Pirates")
+    end)
+    if not success then
+        warn("Falha ao definir time:", err)
+    end
 end)
 task.spawn(function()
     local HttpService = game:GetService("HttpService")
@@ -6991,3 +6996,4 @@ task.spawn(function()
   end)
 end)
 Window:SelectTab(1)
+
